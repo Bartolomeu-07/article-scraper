@@ -1,9 +1,9 @@
 import logging
 from django.core.management.base import BaseCommand
-from django.db.utils import IntegrityError
 
 from app.models import Article
-from app.utils.extractors import extract_article
+from app.utils.scraper_factory import scrap_article
+
 
 logger = logging.getLogger(__name__)
 
@@ -20,27 +20,24 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         total = len(URLS)
-        self.stdout.write(self.style.NOTICE(f"Start scraping {total} articles"))
+        self.stdout.write(self.style.NOTICE(f"Start. Scrapowanie {total} artykułów"))
 
         for idx, url in enumerate(URLS, start=1):
-            self.stdout.write(f"Scraping article {idx}/{total}... {url}")
+            self.stdout.write(f"Scrapuje artykuł {idx}/{total}... {url}")
 
             if Article.objects.filter(source_url=url).exists():
                 self.stdout.write(self.style.WARNING("→ Już w bazie. Pomijam."))
                 continue
 
             try:
-                data = extract_article(url)
+                data = scrap_article(url)
                 if not data:
-                    self.stdout.write(self.style.ERROR("→ Błąd ekstrakcji (pomijam)"))
+                    self.stdout.write(self.style.ERROR("→ Błąd ekstrakcji (pomijam). Szablon strony prawdopodobnie uległ zmianie."))
                     continue
 
                 article = Article(**data)
                 article.save()
                 self.stdout.write(self.style.SUCCESS(f"→ Zapisano (id={article.id})"))
-
-            except IntegrityError:
-                self.stdout.write(self.style.WARNING("→ Duplikat URL – pominięty"))
 
             except Exception as e:
                 logger.exception("Błąd przy przetwarzaniu %s: %s", url, e)

@@ -16,8 +16,7 @@ class ArticleViewSet(mixins.ListModelMixin,
         source = self.request.query_params.get("source")
 
         if source:
-            # Normalize query params
-            # Removing extra spaces to avoid errors when the user accidentally includes a space
             source = source.strip().lower()
-            qs = qs.filter(source_domain__icontains=source)
+            qs = qs.filter(source_domain__iexact=source)
+
         return qs

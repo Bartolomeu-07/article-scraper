@@ -24,7 +24,7 @@ def parse_any_date(raw: str | None, default_tz=WARSAW)-> Optional[datetime]:
     If no time is provided in the input, sets the time to 00:00:00
     in the given timezone.
     """
-    print(f"dateparser - {raw}")
+
     if not raw:
         return None
 
@@ -39,30 +39,14 @@ def parse_any_date(raw: str | None, default_tz=WARSAW)-> Optional[datetime]:
 
     # If there's no date component - return None
     if dt is None:
-        print("111111")
         return None
 
     # If no time component is present, set the time to 00:00:00
     if dt.hour == 0 and dt.minute == 0 and dt.second == 0:
-        print("22222")
+
         # Check whether the time was explicitly provided in the source text — this prevents dateparser
         # from assigning a time when the input uses relative expressions like "yesterday" or "3 days ago"
         if not _TIME_PATTERN.search(raw):
-            print("333333")
             dt = dt.replace(hour=0, minute=0, second=0, microsecond=0)
 
-    print(dt)
-    dt = to_output_format(dt)
-    print(dt)
-
-    return dt
-
-def to_output_format(dt: Optional[datetime])-> Optional[str]:
-    """
-    Convert a timezone-aware datetime object into the required string format.
-    If the input is None, the function returns None.
-    """
-
-    if not dt:
-        return None
-    return dt.astimezone(WARSAW).strftime(OUTPUT_FMT)
+    return dt.astimezone(WARSAW)
