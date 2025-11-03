@@ -8,6 +8,7 @@ colorama==0.4.6
 dateparser==1.2.2
 Django==5.2.7
 djangorestframework==3.16.1
+freezegun==1.5.5
 greenlet==3.2.4
 idna==3.11
 mypy_extensions==1.1.0
