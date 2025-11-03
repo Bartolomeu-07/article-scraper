@@ -5,9 +5,9 @@ from rest_framework import status
 from django.utils import timezone
 from unittest.mock import patch, MagicMock
 
-from .models import Article
-from .utils.main_scraper import MainScraper
-from .utils.scraper_factory import SCRAPER_REGISTRY, get_scraper_for_domain
+from app.models import Article
+from app.utils.main_scraper import MainScraper
+from app.utils.scraper_factory import SCRAPER_REGISTRY, get_scraper_for_domain
 
 
 # ---MODELS---
@@ -143,7 +143,7 @@ class TestFetchPageLogs(SimpleTestCase):
     @patch("app.utils.main_scraper.logger")
     @patch("app.utils.main_scraper.sync_playwright")
     def test_logs_error_when_http_status_is_400_plus(self, mock_sync_playwright, mock_logger):
-        # Arrange: Playwright chain
+
         mock_p = MagicMock()
         mock_browser = MagicMock()
         mock_page = MagicMock()
@@ -155,12 +155,10 @@ class TestFetchPageLogs(SimpleTestCase):
         mock_browser.new_page.return_value = mock_page
         mock_page.goto.return_value = mock_response
 
-        # Act
         scraper = _DummyScraper()
         url = "https://example.com/whatever"
         p, page = scraper.fetch_page(url)
 
-        # Assert
         mock_logger.error.assert_called_with(f"{url} → BŁĄD HTTP 404")
         self.assertIsNotNone(p)
         self.assertIs(page, mock_page)
@@ -168,7 +166,7 @@ class TestFetchPageLogs(SimpleTestCase):
     @patch("app.utils.main_scraper.logger")
     @patch("app.utils.main_scraper.sync_playwright")
     def test_does_not_log_error_when_status_ok(self, mock_sync_playwright, mock_logger):
-        # Arrange
+
         mock_p = MagicMock()
         mock_browser = MagicMock()
         mock_page = MagicMock()
@@ -180,12 +178,10 @@ class TestFetchPageLogs(SimpleTestCase):
         mock_browser.new_page.return_value = mock_page
         mock_page.goto.return_value = mock_response
 
-        # Act
         scraper = _DummyScraper()
         url = "https://example.com/ok"
         p, page = scraper.fetch_page(url)
 
-        # Assert
         mock_logger.error.assert_not_called()
         self.assertIsNotNone(p)
         self.assertIs(page, mock_page)
@@ -193,7 +189,7 @@ class TestFetchPageLogs(SimpleTestCase):
     @patch("app.utils.main_scraper.logger")
     @patch("app.utils.main_scraper.sync_playwright")
     def test_logs_error_when_response_is_none(self, mock_sync_playwright, mock_logger):
-        # Arrange
+
         mock_p = MagicMock()
         mock_browser = MagicMock()
         mock_page = MagicMock()
@@ -203,10 +199,8 @@ class TestFetchPageLogs(SimpleTestCase):
         mock_browser.new_page.return_value = mock_page
         mock_page.goto.return_value = None
 
-        # Act
         scraper = _DummyScraper()
         url = "https://example.com/no-response"
         scraper.fetch_page(url)
 
-        # Asert
         mock_logger.error.assert_called_with(f"{url} → brak odpowiedzi od serwera")

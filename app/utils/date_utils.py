@@ -10,14 +10,14 @@ WARSAW = ZoneInfo("Europe/Warsaw")
 
 OUTPUT_FMT = "%d.%m.%Y %H:%M:%S"
 
-_TIME_PATTERN = re.compile(
+TIME_PATTERN = re.compile(
     r"(\b\d{1,2}:\d{2}(?::\d{2})?\b)|(\b\d{1,2}\s?(am|pm)\b)",
     re.IGNORECASE
 )
 
-_YESTERDAY_PATTERN = re.compile(r"\b(yesterday|wczoraj)\b", re.IGNORECASE)
+YESTERDAY_PATTERN = re.compile(r"\b(yesterday|wczoraj)\b", re.IGNORECASE)
 
-_RELATIVE_PATTERN = re.compile(
+RELATIVE_PATTERN = re.compile(
     r"\b("
     r"today|tomorrow|ago|in\s+\d|next|last|from\s+now|"
     r"dziś|dzisiaj|jutro|za\s+\d+"
@@ -49,12 +49,12 @@ def parse_any_date(raw: str | None, default_tz=WARSAW)-> Optional[datetime]:
     if dt is None:
         return None
 
-    has_explicit_time = bool(_TIME_PATTERN.search(raw))
+    has_explicit_time = bool(TIME_PATTERN.search(raw))
 
     if not has_explicit_time:
-        if _YESTERDAY_PATTERN.search(raw):
+        if YESTERDAY_PATTERN.search(raw):
             dt = dt.replace(hour=0, minute=0, second=0, microsecond=0)
-        elif not _RELATIVE_PATTERN.search(raw):
+        elif not RELATIVE_PATTERN.search(raw):
             dt = dt.replace(hour=0, minute=0, second=0, microsecond=0)
 
     return dt.astimezone(WARSAW)

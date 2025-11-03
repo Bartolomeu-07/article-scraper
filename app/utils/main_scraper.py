@@ -65,16 +65,16 @@ class MainScraper(ABC):
 
     @abstractmethod
     def _extract_title(self, page: Page) -> Optional[str]:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def _extract_content_html(self, page: Page) -> Optional[str]:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def _extract_content_plain_text(self, page: Page) -> Optional[str]:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def _extract_published(self, page: Page) -> Optional[str]:
-        pass
+        raise NotImplementedError

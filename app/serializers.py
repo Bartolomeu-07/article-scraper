@@ -11,23 +11,19 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = [
-        "id",
-        "title",
-        "content_html",
-        "content_text",
-        "source_url",
-        "source_domain",
-        "published_at",
-        ]
+            "id",
+            "title",
+            "content_html",
+            "content_text",
+            "source_url",
+            "source_domain",
+            "published_at",
+            ]
     def get_published_at(self, obj):
 
-        # If date of publication doesn't exists - set None
         if not obj.published_at:
             return None
 
-
-        # Convert the datetime to the Europe/Warsaw timezone
         dt = obj.published_at.astimezone(WARSAW_TZ)
 
-        # Format the datetime as required: dd.mm.yyyy HH:mm:ss
         return dt.strftime("%d.%m.%Y %H:%M:%S")

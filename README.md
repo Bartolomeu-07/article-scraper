@@ -6,8 +6,8 @@ Upewnij się, że masz zainstalowane Python 3.10+ oraz `pip`.
 
 ```bash
 
-git clone <repo-url>
-cd <project-folder>
+git clone https://github.com/Bartolomeu-07/ArticleScraper
+cd article-scrapper
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
@@ -49,8 +49,16 @@ python manage.py scrape_articles
 Projekt zawiera zestaw testów automatycznych
 Aby go uruchomić:
 
+#### (Django)
 ```bash
+
 python manage.py test
+```
+
+#### Pytest(dla parse_any_date())
+```bash
+
+pytest app/tests/test_date_parse.py -q
 ```
 
 ## 📡 Endpointy API
