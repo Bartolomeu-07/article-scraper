@@ -26,7 +26,10 @@ class Migration(migrations.Migration):
                 ("content_html", models.TextField()),
                 ("content_text", models.TextField()),
                 ("source_url", models.URLField(unique=True)),
-                ("source_domain", models.CharField(db_index=True, max_length=255)),
+                (
+                    "source_domain",
+                    models.CharField(db_index=True, max_length=255),
+                ),
                 ("published_at", models.DateTimeField(blank=True, null=True)),
             ],
         ),

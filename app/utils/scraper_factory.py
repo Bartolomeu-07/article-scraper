@@ -13,6 +13,7 @@ SCRAPER_REGISTRY: dict[str, type[MainScraper]] = {
     "galicjaexpress.pl": GalicjaExpressScraper,
 }
 
+
 def get_scraper_for_domain(url: str) -> Optional[MainScraper]:
     host = (urlparse(url).hostname or "").lower()
     for domain, klass in SCRAPER_REGISTRY.items():
@@ -21,6 +22,7 @@ def get_scraper_for_domain(url: str) -> Optional[MainScraper]:
 
     logger.error(f"Brak scrapera dla domeny: {host}")
     return None
+
 
 def scrap_article(url: str) -> Optional[dict]:
     scraper = get_scraper_for_domain(url)

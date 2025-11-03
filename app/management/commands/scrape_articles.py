@@ -20,24 +20,34 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         total = len(URLS)
-        self.stdout.write(self.style.NOTICE(f"Start. Scrapowanie {total} artykułów"))
+        self.stdout.write(
+            self.style.NOTICE(f"Start. Scrapowanie {total} artykułów")
+        )
 
         for idx, url in enumerate(URLS, start=1):
             self.stdout.write(f"Scrapuje artykuł {idx}/{total}... {url}")
 
             if Article.objects.filter(source_url=url).exists():
-                self.stdout.write(self.style.WARNING("→ Już w bazie. Pomijam."))
+                self.stdout.write(
+                    self.style.WARNING("→ Już w bazie. Pomijam.")
+                )
                 continue
 
             try:
                 data = scrap_article(url)
                 if not data:
-                    self.stdout.write(self.style.ERROR("→ Błąd ekstrakcji (pomijam). Szablon strony prawdopodobnie uległ zmianie."))
+                    self.stdout.write(
+                        self.style.ERROR(
+                            "→ Błąd ekstrakcji (pomijam). Szablon strony prawdopodobnie uległ zmianie."
+                        )
+                    )
                     continue
 
                 article = Article(**data)
                 article.save()
-                self.stdout.write(self.style.SUCCESS(f"→ Zapisano (id={article.id})"))
+                self.stdout.write(
+                    self.style.SUCCESS(f"→ Zapisano (id={article.id})")
+                )
 
             except Exception as e:
                 logger.exception("Błąd przy przetwarzaniu %s: %s", url, e)

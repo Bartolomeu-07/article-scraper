@@ -4,9 +4,9 @@ from .models import Article
 from .serializers import ArticleSerializer
 
 
-class ArticleViewSet(mixins.ListModelMixin,
-                    mixins.RetrieveModelMixin,
-                    viewsets.GenericViewSet):
+class ArticleViewSet(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
 
     serializer_class = ArticleSerializer
     queryset = Article.objects.all()

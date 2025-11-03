@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.utils import timezone
 from zoneinfo import ZoneInfo
 from .models import Article
+
 WARSAW_TZ = ZoneInfo("Europe/Warsaw")
 
 
@@ -18,7 +19,8 @@ class ArticleSerializer(serializers.ModelSerializer):
             "source_url",
             "source_domain",
             "published_at",
-            ]
+        ]
+
     def get_published_at(self, obj):
 
         if not obj.published_at:

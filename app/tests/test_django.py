@@ -113,10 +113,12 @@ class TestGetScraperForDomain(SimpleTestCase):
 
     def setUp(self):
         SCRAPER_REGISTRY.clear()
-        SCRAPER_REGISTRY.update({
-            "example.com": ExampleScraper,
-            "test.pl": TestScraper,
-        })
+        SCRAPER_REGISTRY.update(
+            {
+                "example.com": ExampleScraper,
+                "test.pl": TestScraper,
+            }
+        )
 
     def test_returns_scraper_for_example_com(self):
         scraper = get_scraper_for_domain("https://example.com/page")
@@ -132,17 +134,26 @@ class TestGetScraperForDomain(SimpleTestCase):
 
 
 class _DummyScraper(MainScraper):
-    def _extract_title(self, page): return None
-    def _extract_content_html(self, page): return None
-    def _extract_content_plain_text(self, page): return None
-    def _extract_published(self, page): return None
+    def _extract_title(self, page):
+        return None
+
+    def _extract_content_html(self, page):
+        return None
+
+    def _extract_content_plain_text(self, page):
+        return None
+
+    def _extract_published(self, page):
+        return None
 
 
 class TestFetchPageLogs(SimpleTestCase):
 
     @patch("app.utils.main_scraper.logger")
     @patch("app.utils.main_scraper.sync_playwright")
-    def test_logs_error_when_http_status_is_400_plus(self, mock_sync_playwright, mock_logger):
+    def test_logs_error_when_http_status_is_400_plus(
+        self, mock_sync_playwright, mock_logger
+    ):
 
         mock_p = MagicMock()
         mock_browser = MagicMock()
@@ -165,7 +176,9 @@ class TestFetchPageLogs(SimpleTestCase):
 
     @patch("app.utils.main_scraper.logger")
     @patch("app.utils.main_scraper.sync_playwright")
-    def test_does_not_log_error_when_status_ok(self, mock_sync_playwright, mock_logger):
+    def test_does_not_log_error_when_status_ok(
+        self, mock_sync_playwright, mock_logger
+    ):
 
         mock_p = MagicMock()
         mock_browser = MagicMock()
@@ -188,7 +201,9 @@ class TestFetchPageLogs(SimpleTestCase):
 
     @patch("app.utils.main_scraper.logger")
     @patch("app.utils.main_scraper.sync_playwright")
-    def test_logs_error_when_response_is_none(self, mock_sync_playwright, mock_logger):
+    def test_logs_error_when_response_is_none(
+        self, mock_sync_playwright, mock_logger
+    ):
 
         mock_p = MagicMock()
         mock_browser = MagicMock()
@@ -203,4 +218,6 @@ class TestFetchPageLogs(SimpleTestCase):
         url = "https://example.com/no-response"
         scraper.fetch_page(url)
 
-        mock_logger.error.assert_called_with(f"{url} → brak odpowiedzi od serwera")
+        mock_logger.error.assert_called_with(
+            f"{url} → brak odpowiedzi od serwera"
+        )
