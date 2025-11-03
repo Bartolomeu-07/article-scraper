@@ -43,7 +43,15 @@ Projekt zawiera komendę do scrapowania artykułów:
 python manage.py scrape_articles
 ```
 
-Scraper pobiera dane z zewnętrznych źródeł i zapisuje je do bazy.
+
+## 🚦 Testy automatyczne
+
+Projekt zawiera zestaw testów automatycznych
+Aby go uruchomić:
+
+```bash
+python manage.py test
+```
 
 ## 📡 Endpointy API
 
